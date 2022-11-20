@@ -34,7 +34,11 @@ router.post('/',[
 ], createUsuario);
 
 // Eliminar usuario
-router.delete('/', deleteUsuario);
+router.delete('/:id',[
+    check('id', 'No es un id valido').isMongoId(),
+    check('id', 'No existe el recurso solicitado').custom(existsById),
+    validarCampos
+],  deleteUsuario);
 
 // patch usuario
 router.patch('/', patchUsuario);
