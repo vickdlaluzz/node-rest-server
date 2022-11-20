@@ -8,13 +8,17 @@ const isRoleValid = async(rol = '') => {
 }
 
 const emailExists = async(email = '') => {
-    console.log('hola desde emailExists');
     const emailExists = await Usuario.findOne({ correo: email });
-    console.log(emailExists);
     if (emailExists) throw new Error('El correo ya esta registrado.');
+}
+
+const existsById = async( id ) => {
+    const idExists = await Usuario.findById(id);
+    if (!idExists) throw new Error('No existe el recurso solicitado.');
 }
 
 module.exports = {
     isRoleValid,
-    emailExists
+    emailExists,
+    existsById
 }

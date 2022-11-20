@@ -26,11 +26,15 @@ const createUsuario = async(req, res = response) => {
     })
 }
 
-const updateUsuario = (req, res = response) => {
-    const id = req.params;
+const updateUsuario = async(req, res = response) => {
+    const {id} = req.params;
+    const { nombre } = req.body;
+    let usuario = await Usuario.findById(id);
+    usuario.nombre = nombre;
+    usuario = await Usuario.findByIdAndUpdate(id,usuario);
     res.json({
-        msg: 'put API - controller',
-        param: id
+        msg: 'Usuario actualizado correctamente',
+        usuario
     })
 }
 
