@@ -55,7 +55,7 @@ const deleteUsuario = async(req, res = response) => {
     
     res.json({
         msg: 'EL usuario ha sido eliminado',
-        usuario
+        user
     })
 }
 
