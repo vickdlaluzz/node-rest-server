@@ -1,35 +1,61 @@
 const { response, request } = require('express');
+const bcrypt = require('bcryptjs');
+const Usuario = require('../models/usuario');
 
-
-const getUsuarios = (req = request, res = response) => {
-    const { name = 'no name', perro, gato } = req.query;
+const getUsuarios = async(req = request, res = response) => {
+    const { limit = 5, from = 0 } = req.query;
+    const query = { estado: true };
+    // const usuarios = await Usuario.find(query)
+    //                     .skip(Number(from))
+    //                     .limit(Number(limit));
+    // const total = await Usuario.countDocuments(query);
+    const [ users, total ] = await Promise.all([
+                    Usuario.find(query)
+                        .skip(Number(from))
+                        .limit(Number(limit)),
+                    Usuario.countDocuments(query)
+    ])
     res.json({
-        msg: 'get API - controller',
-        perro,
-        gato,
-        name
+        total,
+        elements: users.length,
+        users
     })
 }
 
-const createUsuario = (req, res = response) => {
-    const body = req.body;
+const createUsuario = async(req, res = response) => {
+    const { nombre, correo, password, rol } = req.body;
+    const usuario = new Usuario({ nombre, correo, password, rol });
+    // Encriptar el password
+    const salt = bcrypt.genSaltSync();
+    usuario.password = bcrypt.hashSync(usuario.password, salt);
+    // Guardar usuario
+    await usuario.save();
     res.json({
         msg: 'post API - controller',
-        body
+        usuario
     })
 }
 
-const updateUsuario = (req, res = response) => {
-    const id = req.params;
+const updateUsuario = async(req, res = response) => {
+    const {id} = req.params;
+    const { nombre } = req.body;
+    let usuario = await Usuario.findById(id);
+    usuario.nombre = nombre;
+    usuario = await Usuario.findByIdAndUpdate(id,usuario);
     res.json({
-        msg: 'put API - controller',
-        param: id
+        msg: 'Usuario actualizado correctamente',
+        usuario
     })
 }
 
-const deleteUsuario = (req, res = response) => {
+const deleteUsuario = async(req, res = response) => {
+    const { id } = req.params;
+
+    const user = await Usuario.findByIdAndUpdate(id, { estado: false })
+    
     res.json({
-        msg: 'delete API - controller'
+        msg: 'EL usuario ha sido eliminado',
+        usuario
     })
 }
 
