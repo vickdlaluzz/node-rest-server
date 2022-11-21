@@ -12,6 +12,7 @@ class Server {
 
         // route paths
         this.usuariosPath = '/api/usuarios';
+        this.authPath = '/api/auth'
 
         // Conectar a base de datos
         this.dbConnection();
@@ -30,6 +31,7 @@ class Server {
 
     routes() {
         this.app.use(this.usuariosPath, require('../routes/user.routes'));
+        this.app.use(this.authPath, require('../routes/auth.routes'));
     }
 
 

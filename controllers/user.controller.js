@@ -50,12 +50,11 @@ const updateUsuario = async(req, res = response) => {
 
 const deleteUsuario = async(req, res = response) => {
     const { id } = req.params;
-
     const user = await Usuario.findByIdAndUpdate(id, { estado: false })
     
     res.json({
         msg: 'EL usuario ha sido eliminado',
-        user
+        deletedUser: user
     })
 }
 
