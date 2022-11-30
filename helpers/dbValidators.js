@@ -14,7 +14,7 @@ const emailExists = async(email = '') => {
     if (emailExists) throw new Error('El correo ya esta registrado.');
 }
 
-const existsById = async( id ) => {
+const existsUserById = async( id ) => {
     const idExists = await Usuario.findById(id);
     if (!idExists) throw new Error('No existe el recurso solicitado.');
 }
@@ -33,7 +33,7 @@ const existProductoById = async( id ) => {
 module.exports = {
     isRoleValid,
     emailExists,
-    existsById,
+    existsUserById,
     existCategoriaById,
     existProductoById
 }
